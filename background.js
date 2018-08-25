@@ -1,15 +1,11 @@
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.storage.sync.set({color: '#3aa757'}, function () {
-        console.log("The color is green.");
+send_signal = function () {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {});
     });
-});
+};
 
 chrome.commands.onCommand.addListener(function (command) {
-    chrome.storage.sync.get('color', function (data) {
-        color = data.color;
-        console.log('Color:', color);
-        chrome.tabs.executeScript(
-            {code: 'document.body.style.backgroundColor = "' + color + '";'});
-    });
-    console.log('Command:', command);
+    if (command === "show-emoji-selector") {
+        send_signal();
+    }
 });
