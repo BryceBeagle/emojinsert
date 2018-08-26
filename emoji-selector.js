@@ -1,37 +1,39 @@
-create_modal = function () {
-    wrapperDiv = document.createElement("div");
-    wrapperDiv.setAttribute("style", "position: absolute; left: 0px; top: 0px; background-color: rgb(255, 255, 255); opacity: 0.5; z-index: 2000; height: 1083px; width: 100%;");
+create_modal = function (textbox) {
 
-    iframeElement = document.createElement("iframe");
-    iframeElement.setAttribute("style", "width: 100%; height: 100%;");
+    // Surrounding emoji-selector
+    let emoji_selector = document.createElement("div");
+    emoji_selector.className = "emoji-selector";
 
-    wrapperDiv.appendChild(iframeElement);
+    let position_rect = textbox.getBoundingClientRect();
+    emoji_selector.setAttribute("style",
+        "position: absolute; " +
+        "width: 350px; " +
+        "border: 1px solid rgb(51, 102, 153); " +
+        "padding: 10px; " +
+        "background-color: rgb(255, 255, 255); " +
+        "z-index: 1000; " +
+        "overflow: auto; " +
+        "text-align:center; " +
+        `top: ${position_rect.top}px; left: ${position_rect.left}px;`);
+    document.body.appendChild(emoji_selector);
 
-    modalDialogParentDiv = document.createElement("div");
-    modalDialogParentDiv.setAttribute("style", "position: absolute; width: 350px; border: 1px solid rgb(51, 102, 153); padding: 10px; background-color: rgb(255, 255, 255); z-index: 2001; overflow: auto; text-align: center; top: 149px; left: 497px;");
+    // Text field
+    let modalDialogTextSpan = document.createElement("span");
+    modalDialogTextSpan.innerHTML = "Processing...  Please Wait.";
 
-    modalDialogSiblingDiv = document.createElement("div");
-
-    modalDialogTextDiv = document.createElement("div");
-    modalDialogTextDiv.setAttribute("style", "text-align:center");
-
-    modalDialogTextSpan = document.createElement("span");
-    modalDialogText = document.createElement("strong");
-    modalDialogText.innerHTML = "Processing...  Please Wait.";
-
-// breakElement = document.createElement("br");
-
-    modalDialogTextSpan.appendChild(modalDialogText);
-    modalDialogTextDiv.appendChild(modalDialogTextSpan);
-// modalDialogTextDiv.appendChild(breakElement);
-// modalDialogTextDiv.appendChild(breakElement);
-
-    modalDialogSiblingDiv.appendChild(modalDialogTextDiv);
-    modalDialogParentDiv.appendChild(modalDialogSiblingDiv);
-
-    document.body.appendChild(wrapperDiv);
-    document.body.appendChild(modalDialogParentDiv);
+    emoji_selector.appendChild(modalDialogTextSpan);
 };
+
+chrome.runtime.onMessage.addListener(
+    function (_request, _sender, sendResponse) {
+        let textbox = get_active_textbox();
+
+        if (textbox) {
+            create_modal(textbox);
+        }
+        sendResponse();
+    }
+);
 
 get_active_textbox = function () {
     let activeElement = document.activeElement;
@@ -41,17 +43,5 @@ get_active_textbox = function () {
     }
 };
 
-
-chrome.runtime.onMessage.addListener(
-    function (_request, _sender, sendResponse) {
-        let active_element = get_active_textbox();
-        console.log("Active element:", get_active_textbox());
-
-        if (active_element) {
-            console.log("ParentNode:", active_element.parentNode);
-            create_modal();
-        }
-
-        sendResponse();
-
-    });
+// https://stackoverflow.com/questions/39871916/is-it-possible-to-generate-all-the-emojis-and-append-to-the-select-dropdown
+// https://stackoverflow.com/questions/1720320/how-to-dynamically-create-css-class-in-javascript-and-apply
