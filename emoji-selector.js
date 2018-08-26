@@ -1,4 +1,23 @@
-create_modal = function (textbox) {
+chrome.runtime.onMessage.addListener(
+    function (_request, _sender, sendResponse) {
+        let textbox = get_active_textbox();
+
+        if (textbox) {
+            create_emoji_selector(textbox);
+        }
+        sendResponse();
+    }
+);
+
+get_active_textbox = function () {
+    let activeElement = document.activeElement;
+
+    if (activeElement && activeElement.type === "text") {
+        return activeElement;
+    }
+};
+
+create_emoji_selector = function (textbox) {
 
     // Surrounding emoji-selector
     let emoji_selector = document.createElement("div");
@@ -22,25 +41,6 @@ create_modal = function (textbox) {
     modalDialogTextSpan.innerHTML = "Processing...  Please Wait.";
 
     emoji_selector.appendChild(modalDialogTextSpan);
-};
-
-chrome.runtime.onMessage.addListener(
-    function (_request, _sender, sendResponse) {
-        let textbox = get_active_textbox();
-
-        if (textbox) {
-            create_modal(textbox);
-        }
-        sendResponse();
-    }
-);
-
-get_active_textbox = function () {
-    let activeElement = document.activeElement;
-
-    if (activeElement && activeElement.type === "text") {
-        return activeElement;
-    }
 };
 
 // https://stackoverflow.com/questions/39871916/is-it-possible-to-generate-all-the-emojis-and-append-to-the-select-dropdown
