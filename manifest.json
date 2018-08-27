@@ -19,7 +19,8 @@
         "*://*.google.com/"
       ],
       "js": [
-        "emoji-selector.js"
+        "emoji-selector/emoji-selector-elements.js",
+        "emoji-selector/emoji-selector.js"
       ]
     }
   ],
