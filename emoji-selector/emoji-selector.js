@@ -2,10 +2,15 @@
 
 chrome.runtime.onMessage.addListener(
     function (_request, _sender, sendResponse) {
+
         let textbox = get_active_textbox();
 
         if (textbox) {
             create_emoji_selector(textbox);
+            let request = indexedDB.open('emoji_db', 1);
+            request.onsuccess = function (event) {
+                console.log(event.target.result);
+            };
         }
         sendResponse();
     }

@@ -20,6 +20,7 @@
         "*://*.google.com/"
       ],
       "js": [
+        "emoji-selector/emoji-selector-util.js",
         "emoji-selector/emoji-selector-elements.js",
         "emoji-selector/emoji-selector.js"
       ]

@@ -19,10 +19,24 @@ function es_emoji_selector(textbox) {
 
     emoji_selector.style.top = `${position_rect.top}px`;
     emoji_selector.style.left = `${position_rect.left}px`;
-    emoji_selector.appendChild(es_emoji_grid(8));
+
+    let search_box = es_search_box();
+    let emoji_grid = es_emoji_grid(8);
+
+    emoji_selector.appendChild(search_box);
+    emoji_selector.appendChild(emoji_grid);
+
+    search_box.addEventListener("input", function() {
+        emoji_grid_search(search_box.value, emoji_grid);
+    });
 
     return emoji_selector;
 
+}
+
+function es_search_box() {
+    let search_box = document.createElement("input");
+    return search_box;
 }
 
 function es_emoji_grid(num_columns) {
