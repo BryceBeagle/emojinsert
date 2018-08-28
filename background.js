@@ -11,7 +11,7 @@ chrome.commands.onCommand.addListener(function (command) {
 });
 
 function init_database(callback) {
-    // No reason to keep old version around
+    // No reason to keep old version around. We just installed this extension
     indexedDB.deleteDatabase("emoji_db");
 
     // Create a new database to hold emojis
@@ -19,9 +19,14 @@ function init_database(callback) {
     request.onupgradeneeded = function (event) {
 
         let database = event.target.result;
-        database.createObjectStore("emojis");
+        let object_store = database.createObjectStore("emojis", {keyPath: "code_points"});
 
-        callback(database);
+        object_store.createIndex("name", "name", {unique: false});
+        object_store.createIndex("emoji", "emoji", {unique: true});
+
+        object_store.transaction.oncomplete = function () {
+            callback(database);
+        }
     };
 }
 
@@ -41,14 +46,18 @@ function get_all_emojis(database) {
 }
 
 function save_all_emojis(response_text, database) {
+    let emoji_object_store = database.transaction("emojis", "readwrite").objectStore("emojis");
+    console.log(emoji_object_store);
+
     let lines = response_text.split(/[\n\r]+/g);
     for (let line of lines) {
         let emoji_line_regex = /^(.+);\s+fully-qualified\s+#\s+(\S+)\s+(.*)?$/gmu;
         let match = emoji_line_regex.exec(line);
         if (match) {
-            let code_points = match[1].trim().split();
+            let code_points = match[1].trim();
             let emoji = match[2];
             let name = match[3];
+            emoji_object_store.add({code_points: code_points, emoji: emoji, name: name})
         }
     }
 }
