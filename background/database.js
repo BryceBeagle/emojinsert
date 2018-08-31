@@ -1,3 +1,5 @@
+"use strict";
+
 // Database. Creates it if it does not exist
 let emoji_db = new localStorageDB('emoji_db', localStorage);
 

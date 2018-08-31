@@ -1,4 +1,4 @@
-// import emoji_entry from './emoji-entry'
+"use strict";
 
 chrome.runtime.onMessage.addListener(
     function (message, _sender, sendResponse) {
