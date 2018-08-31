@@ -26,7 +26,7 @@ function es_emoji_selector(textbox) {
     emoji_selector.appendChild(search_box);
     emoji_selector.appendChild(emoji_grid);
 
-    search_box.addEventListener("input", function() {
+    search_box.addEventListener("input", function () {
         emoji_search(search_box.value, function (emojis) {
             let all_emojis = emojis;
             console.log(all_emojis);
@@ -44,25 +44,20 @@ function es_search_box() {
 
 function es_emoji_grid(num_columns) {
 
-    emoji_search(null, function (emojis) {
-        let all_emojis = emojis;
-        console.log(all_emojis);
-    });
-
     let table = document.createElement("table");
     table.style.tableLayout = "fixed";
 
-    let characters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '\u{1F4A9}'];
-
-    let i = 0;
-    while (characters[i]) {
-        let row = table.insertRow();
-        for (let col = 0; col < num_columns; col++) {
-            let cell = row.insertCell();
-            let char = characters[i++];
-            cell.innerText = char ? char : ""
+    emoji_search(null, function (emojis) {
+        let i = 0;
+        while (emojis[i]) {
+            let row = table.insertRow();
+            for (let col = 0; col < num_columns; col++) {
+                let cell = row.insertCell();
+                let char = emojis[i++];
+                cell.innerText = char ? char : "";
+            }
         }
-    }
+    });
 
     return table;
 
