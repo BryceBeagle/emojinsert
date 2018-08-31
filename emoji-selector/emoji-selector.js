@@ -45,6 +45,9 @@ function create_emoji_selector(textbox) {
     let emoji_selector = es_emoji_selector(textbox);
     document.body.appendChild(emoji_selector);
 
+    // Focus the new textbox
+    document.getElementById('emoji_search_box').focus();
+
 }
 
 // https://stackoverflow.com/questions/39871916/is-it-possible-to-generate-all-the-emojis-and-append-to-the-select-dropdown
