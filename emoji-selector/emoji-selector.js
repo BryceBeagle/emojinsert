@@ -1,20 +1,35 @@
 // import emoji_entry from './emoji-entry'
 
 chrome.runtime.onMessage.addListener(
-    function (_request, _sender, sendResponse) {
+    function (message, _sender, sendResponse) {
 
-        let textbox = get_active_textbox();
-
-        if (textbox) {
-            create_emoji_selector(textbox);
-            let request = indexedDB.open('emoji_db', 1);
-            request.onsuccess = function (event) {
-                console.log(event.target.result);
-            };
+        if (message.id === "open_emoji_selector") {
+            open_emoji_selector();
         }
         sendResponse();
     }
 );
+
+function open_emoji_selector() {
+    let textbox = get_active_textbox();
+
+    if (textbox) {
+        create_emoji_selector(textbox);
+        // let db_request = indexedDB.open('emoji_db', 1);
+        // db_request.onsuccess = function (event) {
+        //     let database = event.target.result;
+        //     let emoji_object_store = database.transaction("emojis", "readonly");
+        //     console.log(emoji_object_store);
+        //     console.log(emoji_object_store.objectStore("emojis"));
+        //     //     .objectStore("emojis")
+        //     //     .openCursor(emoji_object_store.getAll(IDBKeyRange.lowerBound(undefined), 24))
+        //     //     .onsuccess = function (event) {
+        //     //     console.log(event.target.result);
+        //     // };
+        //
+        // };
+    }
+}
 
 function get_active_textbox() {
     let activeElement = document.activeElement;

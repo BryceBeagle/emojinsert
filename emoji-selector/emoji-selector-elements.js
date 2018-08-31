@@ -27,7 +27,10 @@ function es_emoji_selector(textbox) {
     emoji_selector.appendChild(emoji_grid);
 
     search_box.addEventListener("input", function() {
-        emoji_grid_search(search_box.value, emoji_grid);
+        emoji_search(search_box.value, function (emojis) {
+            let all_emojis = emojis;
+            console.log(all_emojis);
+        });
     });
 
     return emoji_selector;
@@ -40,6 +43,11 @@ function es_search_box() {
 }
 
 function es_emoji_grid(num_columns) {
+
+    emoji_search(null, function (emojis) {
+        let all_emojis = emojis;
+        console.log(all_emojis);
+    });
 
     let table = document.createElement("table");
     table.style.tableLayout = "fixed";

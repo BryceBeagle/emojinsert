@@ -10,14 +10,16 @@
   ],
   "background": {
     "scripts": [
-      "background.js"
+      "localStorageDB/localstoragedb.js",
+      "background/database.js",
+      "background/background.js"
     ],
     "persistent": false
   },
   "content_scripts": [
     {
       "matches": [
-        "*://*.google.com/"
+        "<all_urls>"
       ],
       "js": [
         "emoji-selector/emoji-selector-util.js",
@@ -27,7 +29,7 @@
     }
   ],
   "commands": {
-    "show-emoji-selector": {
+    "show_emoji_selector": {
       "suggested_key": {
         "default": "Ctrl+Space"
       },
