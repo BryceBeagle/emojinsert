@@ -17,11 +17,11 @@ function es_emoji_selector(textbox) {
     emoji_selector.style.overflowY = "auto";
     emoji_selector.style.textAlign = "center";
 
-    emoji_selector.style.top = `${position_rect.top}px`;
+    emoji_selector.style.top = `${position_rect.top + 50}px`;
     emoji_selector.style.left = `${position_rect.left}px`;
 
     let search_box = es_search_box();
-    let emoji_grid = es_emoji_grid(4, 8);
+    let emoji_grid = es_emoji_grid(4, 8, textbox);
     emoji_search(null, function (emojis) {
         populate_emoji_grid(emoji_grid, emojis);
     });
@@ -45,7 +45,7 @@ function es_search_box() {
     return search_box;
 }
 
-function es_emoji_grid(num_rows, num_columns) {
+function es_emoji_grid(num_rows, num_columns, textbox) {
 
     let table = document.createElement("table");
     table.style.tableLayout = "fixed";
@@ -53,7 +53,18 @@ function es_emoji_grid(num_rows, num_columns) {
     for (let row_num = 0; row_num < num_rows; row_num++) {
         let row = table.insertRow();
         for (let column_num = 0; column_num < num_columns; column_num++) {
-            row.insertCell();
+            let cell = row.insertCell();
+            cell.onclick = function () {
+                let cursor_pos = textbox.selectionStart;
+                let current_text = textbox.value;
+                console.log(current_text);
+                textbox.value = [
+                    current_text.slice(0, cursor_pos),
+                    cell.innerText,
+                    current_text.slice(cursor_pos)]
+                    .join('');
+                console.log(cell.innerText);
+            }
         }
     }
 

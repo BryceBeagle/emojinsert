@@ -15,19 +15,6 @@ function open_emoji_selector() {
 
     if (textbox) {
         create_emoji_selector(textbox);
-        // let db_request = indexedDB.open('emoji_db', 1);
-        // db_request.onsuccess = function (event) {
-        //     let database = event.target.result;
-        //     let emoji_object_store = database.transaction("emojis", "readonly");
-        //     console.log(emoji_object_store);
-        //     console.log(emoji_object_store.objectStore("emojis"));
-        //     //     .objectStore("emojis")
-        //     //     .openCursor(emoji_object_store.getAll(IDBKeyRange.lowerBound(undefined), 24))
-        //     //     .onsuccess = function (event) {
-        //     //     console.log(event.target.result);
-        //     // };
-        //
-        // };
     }
 }
 
