@@ -20,19 +20,34 @@ function es_emoji_selector(textbox) {
     emoji_selector.style.top = `${position_rect.top + 50}px`;
     emoji_selector.style.left = `${position_rect.left}px`;
 
-    let search_box = es_search_box();
     let emoji_grid = es_emoji_grid(4, 8, textbox);
     emoji_search(null, function (emojis) {
         populate_emoji_grid(emoji_grid, emojis);
     });
+    let search_box = es_search_box();
 
-    emoji_selector.appendChild(search_box);
     emoji_selector.appendChild(emoji_grid);
+    emoji_selector.appendChild(search_box);
 
     search_box.addEventListener("input", function () {
         emoji_search(search_box.value, function (emojis) {
             populate_emoji_grid(emoji_grid, emojis);
         });
+    });
+
+    // Hide selector if click off event
+    emoji_selector.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+    addEventListener("click", function () {
+        emoji_selector.style.display = "none";
+    });
+
+    // Hide selector if ESC is pressed
+    addEventListener("keydown", function (event) {
+        if (event.code === "Escape") {
+            emoji_selector.style.display = "none";
+        }
     });
 
     return emoji_selector;
@@ -56,15 +71,12 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
             let cell = row.insertCell();
             cell.onclick = function () {
                 let cursor_pos = textbox.selectionStart;
-                let current_text = textbox.value;
-                console.log(current_text);
                 textbox.value = [
-                    current_text.slice(0, cursor_pos),
+                    textbox.value.slice(0, cursor_pos),
                     cell.innerText,
-                    current_text.slice(cursor_pos)]
-                    .join('');
-                console.log(cell.innerText);
-            }
+                    textbox.value.slice(cursor_pos)
+                ].join('');
+            };
         }
     }
 
@@ -74,15 +86,13 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
 
 function populate_emoji_grid(emoji_grid, emojis) {
 
-    console.log(emojis);
-
     let emoji_iter = emojis.values();
 
     for (let row of emoji_grid.rows) {
         for (let cell of row.cells) {
-            let emoji = emoji_iter.next().value;
-            cell.innerText = emoji ? emoji : '';
+            let emoji_item = emoji_iter.next().value;
+            cell.innerText = emoji_item ? emoji_item.emoji : '';
+            cell.title = emoji_item ? emoji_item.name : null;
         }
     }
-
 }

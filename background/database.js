@@ -40,11 +40,10 @@ function get_all_emojis(callback) {
 }
 
 function db_search_emojis(query) {
-    let emojis = emoji_db.queryAll('emojis', {
+    return emoji_db.queryAll('emojis', {
         query: function(row) {
             return query == null || row.name.includes(query);
         },
         limit: 32
     });
-    return emojis.map(emoji => emoji.emoji);
 }
