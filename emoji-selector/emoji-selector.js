@@ -30,6 +30,7 @@ function open_emoji_selector() {
         // If so, reshow it and and focus its search textbox
         emojinline.style.display = "initial";
         emojinline.search_box.focus();
+        emojinline.search_box.value = "";
     } else {
         // Otherwise, we need to create it for the first time on this page
         emojinline = es_emoji_selector(textbox);
@@ -37,6 +38,13 @@ function open_emoji_selector() {
         // Add the UI element to the DOM. The stylesheet will control its position
         document.body.appendChild(emojinline);
     }
+
+    // Set the position of the UI element to be above the active textbox
+    let position_rect = textbox.getBoundingClientRect();
+    console.log(position_rect);
+    emojinline.style.top = `${position_rect.top + 25}px`;
+    emojinline.style.left = `${position_rect.left}px`;
+
 }
 
 /* Get the active textbox on the window, ie. the one with the blinking cursor the user is typing in */

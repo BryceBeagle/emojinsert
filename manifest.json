@@ -25,6 +25,9 @@
         "emoji-selector/emoji-selector-util.js",
         "emoji-selector/emoji-selector-elements.js",
         "emoji-selector/emoji-selector.js"
+      ],
+      "css" : [
+        "emoji-selector/emoji-selector.css"
       ]
     }
   ],
@@ -42,5 +45,8 @@
     "48": "images/get_started48.png",
     "128": "images/get_started128.png"
   },
+  "web_accessible_resources": [
+    "emoji-selector/emoji-selector.css"
+  ],
   "manifest_version": 2
 }
