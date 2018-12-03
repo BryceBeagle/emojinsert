@@ -1,26 +1,33 @@
 "use strict";
 
+/* Create an emoji selector UI element */
 function es_emoji_selector(textbox) {
 
+    // Create a new div at the top level of the DOM and give it a class name of `emoji-selector`
     let emoji_selector = document.createElement("div");
     emoji_selector.className = "emoji-selector";
 
-    let emoji_grid = es_emoji_grid(4, 8, textbox);
+    // Create a 4x8 grid of emojis and populate it (grabs first 32 emojis on the list)
+    emoji_selector.emoji_grid = es_emoji_grid(4, 8, textbox);
     emoji_search(null, function (emojis) {
-        populate_emoji_grid(emoji_grid, emojis);
+        populate_emoji_grid(emoji_selector.emoji_grid, emojis);
     });
-    let search_box = es_search_box();
 
-    emoji_selector.appendChild(emoji_grid);
-    emoji_selector.appendChild(search_box);
+    // Search box for searching for emojis by name or other attribute
+    emoji_selector.search_box = document.createElement("input");
 
-    search_box.addEventListener("input", function () {
-        emoji_search(search_box.value, function (emojis) {
-            populate_emoji_grid(emoji_grid, emojis);
+    // Add the grid and search box elements to the DOM as children of the main UI element
+    emoji_selector.appendChild(emoji_selector.emoji_grid);
+    emoji_selector.appendChild(emoji_selector.search_box);
+
+    // Listen for changes to the textbox's value TODO: react to changes through javascript
+    emoji_selector.search_box.addEventListener("input", function () {
+        emoji_search(emoji_selector.search_box.value, function (emojis) {
+            populate_emoji_grid(emoji_selector.emoji_grid, emojis);
         });
     });
 
-    // Hide selector if click off event
+    // Hide the UI element if a click is performed anywhere but on the UI element
     emoji_selector.addEventListener("click", function (event) {
         event.stopPropagation();
     });
@@ -28,34 +35,29 @@ function es_emoji_selector(textbox) {
         emoji_selector.style.display = "none";
     });
 
-    // Hide selector if ESC is pressed
+    // Hide the UI element if ESC is pressed
     addEventListener("keydown", function (event) {
         if (event.code === "Escape") {
             emoji_selector.style.display = "none";
         }
     });
 
-    emoji_selector.search_box = search_box;
-    emoji_selector.emoji_grid = emoji_grid;
-
     return emoji_selector;
 }
 
-function es_search_box() {
-    let search_box = document.createElement("input");
-    search_box.id = 'emoji_search_box';
-    return search_box;
-}
-
+/* Create the grid to populate with emojis */
 function es_emoji_grid(num_rows, num_columns, textbox) {
 
-    let table = document.createElement("table");
-    table.style.tableLayout = "fixed";
+    let emoji_grid = document.createElement("table");
+    emoji_grid.className = "emoji-grid";
 
+    // Create each cell in the grid
     for (let row_num = 0; row_num < num_rows; row_num++) {
-        let row = table.insertRow();
+        let row = emoji_grid.insertRow();
         for (let column_num = 0; column_num < num_columns; column_num++) {
             let cell = row.insertCell();
+
+            // Insert a cell's emoji into the active textbox where the cursor is when clicked
             cell.onclick = function () {
                 let cursor_pos = textbox.selectionStart;
                 textbox.value = [
@@ -67,10 +69,14 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
         }
     }
 
-    return table;
+    return emoji_grid;
 
 }
 
+/* Populate the grid with emojis
+*  If there are more cells than emojis, blanks are inserted
+*  If there are more emojis than cells, they are ignored
+* */
 function populate_emoji_grid(emoji_grid, emojis) {
 
     let emoji_iter = emojis.values();
