@@ -27,9 +27,8 @@ function open_emoji_selector() {
 
     // Have we created the UI element before?
     if (emojinline) {
-        // If so, reshow it and and focus its search textbox
+        // If so, reshow it (clear the text if there was any)
         emojinline.style.display = "initial";
-        emojinline.search_box.focus();
         emojinline.search_box.value = "";
     } else {
         // Otherwise, we need to create it for the first time on this page
@@ -38,6 +37,9 @@ function open_emoji_selector() {
         // Add the UI element to the DOM. The stylesheet will control its position
         document.body.appendChild(emojinline);
     }
+
+    // Focus the new search box
+    emojinline.search_box.focus();
 
     // Set the position of the UI element to be above the active textbox
     let position_rect = textbox.getBoundingClientRect();

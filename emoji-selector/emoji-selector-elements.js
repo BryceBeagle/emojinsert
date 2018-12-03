@@ -14,11 +14,11 @@ function es_emoji_selector(textbox) {
     });
 
     // Search box for searching for emojis by name or other attribute
-    emoji_selector.search_box = document.createElement("input");
+    emoji_selector.search_box = es_search_box();
 
     // Add the grid and search box elements to the DOM as children of the main UI element
-    emoji_selector.appendChild(emoji_selector.emoji_grid);
     emoji_selector.appendChild(emoji_selector.search_box);
+    emoji_selector.appendChild(emoji_selector.emoji_grid);
 
     // Listen for changes to the textbox's value TODO: react to changes through javascript
     emoji_selector.search_box.addEventListener("input", function () {
@@ -73,10 +73,17 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
 
 }
 
+function es_search_box() {
+    let search_box = document.createElement("input");
+    search_box.className = 'emoji-search-box';
+
+    return search_box;
+}
+
 /* Populate the grid with emojis
 *  If there are more cells than emojis, blanks are inserted
 *  If there are more emojis than cells, they are ignored
-* */
+*/
 function populate_emoji_grid(emoji_grid, emojis) {
 
     let emoji_iter = emojis.values();
