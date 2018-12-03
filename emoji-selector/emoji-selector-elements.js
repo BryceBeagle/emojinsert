@@ -93,6 +93,7 @@ function populate_emoji_grid(emoji_grid, emojis) {
             let emoji_item = emoji_iter.next().value;
             cell.innerText = emoji_item ? emoji_item.emoji : '';
             cell.title = emoji_item ? emoji_item.name : null;
+            cell.style.tooltip = cell.title;
         }
     }
 }
