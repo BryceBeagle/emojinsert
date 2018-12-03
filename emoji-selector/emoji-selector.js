@@ -43,7 +43,7 @@ function open_emoji_selector() {
 
     // Set the position of the UI element to be above the active textbox
     let position_rect = textbox.getBoundingClientRect();
-    emojinline.style.top = `${position_rect.top + 25}px`;
+    emojinline.style.top = `${position_rect.top + 40}px`;
     emojinline.style.left = `${position_rect.left}px`;
 
 }
