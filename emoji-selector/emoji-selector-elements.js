@@ -59,12 +59,8 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
 
             // Insert a cell's emoji into the active textbox where the cursor is when clicked
             cell.onclick = function () {
-                let cursor_pos = textbox.selectionStart;
-                textbox.value = [
-                    textbox.value.slice(0, cursor_pos),
-                    cell.innerText,
-                    textbox.value.slice(cursor_pos)
-                ].join('');
+                textbox.focus();
+                document.execCommand('insertText', false, cell.innerText)
             };
         }
     }

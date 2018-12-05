@@ -43,9 +43,8 @@ function open_emoji_selector() {
 
     // Set the position of the UI element to be above the active textbox
     let position_rect = textbox.getBoundingClientRect();
-    emojinline.style.top = `${position_rect.top + 40}px`;
+    emojinline.style.top = `${position_rect.top + 35}px`;
     emojinline.style.left = `${position_rect.left}px`;
-
 }
 
 /* Get the active textbox on the window, ie. the one with the blinking cursor the user is typing in */
@@ -54,7 +53,7 @@ function get_active_textbox() {
 
     // Is there an active element, and if so, is it of type `text`? Other types of active elements could be checkboxes
     // or radio buttons
-    if (activeElement && activeElement.type === "text") {
+    if (activeElement && activeElement.contentEditable) {
         return activeElement;
     }
 }
