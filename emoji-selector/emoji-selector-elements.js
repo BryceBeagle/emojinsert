@@ -7,10 +7,6 @@ function es_emoji_selector(textbox) {
     let emoji_selector = document.createElement("div");
     emoji_selector.className = "emoji-selector";
 
-    emoji_selector.hide = function () {
-        emoji_selector.style.display = "none";
-    };
-
     // Create a 4x8 grid of emojis and populate it (grabs first 32 emojis on the list)
     emoji_selector.emoji_grid = es_emoji_grid(4, 8, textbox);
     emoji_search(null, function (emojis) {
@@ -39,7 +35,7 @@ function es_emoji_selector(textbox) {
         }
     });
     addEventListener("click", function () {
-        emoji_selector.hide();
+        emoji_selector.style.display = "none";
     });
 
     // Hide the UI element if ESC is pressed
