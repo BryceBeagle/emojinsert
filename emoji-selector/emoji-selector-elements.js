@@ -7,6 +7,10 @@ function es_emoji_selector(textbox) {
     let emoji_selector = document.createElement("div");
     emoji_selector.className = "emoji-selector";
 
+    emoji_selector.hide = function () {
+        emoji_selector.style.display = "none";
+    };
+
     // Create a 4x8 grid of emojis and populate it (grabs first 32 emojis on the list)
     emoji_selector.emoji_grid = es_emoji_grid(4, 8, textbox);
     emoji_search(null, function (emojis) {
@@ -29,10 +33,13 @@ function es_emoji_selector(textbox) {
 
     // Hide the UI element if a click is performed anywhere but on the UI element
     emoji_selector.addEventListener("click", function (event) {
-        event.stopPropagation();
+        // Stop propagation unless the clicked element was an emoji
+        if (event.srcElement.tagName !== "TD") {
+            event.stopPropagation();
+        }
     });
     addEventListener("click", function () {
-        emoji_selector.style.display = "none";
+        emoji_selector.hide();
     });
 
     // Hide the UI element if ESC is pressed
@@ -60,7 +67,7 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
             // Insert a cell's emoji into the active textbox where the cursor is when clicked
             cell.onclick = function () {
                 textbox.focus();
-                document.execCommand('insertText', false, cell.innerText)
+                document.execCommand('insertText', false, cell.innerText);
             };
         }
     }
