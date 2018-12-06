@@ -27,9 +27,9 @@ function es_emoji_selector(textbox) {
         });
     });
 
-    // Hide the UI element if a click is performed anywhere but on the UI element
+    // Hide the UI element if a click is performed anywhere but on the UI element.
+    // Also close if an emoji (table cell) was clicked
     emoji_selector.addEventListener("click", function (event) {
-        // Stop propagation unless the clicked element was an emoji
         if (event.srcElement.tagName !== "TD") {
             event.stopPropagation();
         }
