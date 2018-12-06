@@ -9,4 +9,4 @@
 
 **Usage**
 
-Press Ctrl+Space in a textbox and hope it works. It will probable be awkwardly positioned
+Press Ctrl+Space in a textbox and hope it works. It will probably be awkwardly positioned
