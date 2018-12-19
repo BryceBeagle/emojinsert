@@ -10,7 +10,7 @@
   ],
   "background": {
     "scripts": [
-      "localStorageDB/localstoragedb.js",
+      "node_modules/localstoragedb/localstoragedb.js",
       "background/database.js",
       "background/background.js"
     ],
@@ -22,6 +22,7 @@
         "<all_urls>"
       ],
       "js": [
+        "node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js",
         "emoji-selector/emoji-selector-util.js",
         "emoji-selector/emoji-selector-elements.js",
         "emoji-selector/emoji-selector.js"

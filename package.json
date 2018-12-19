@@ -1,0 +1,26 @@
+{
+  "name": "emojinsert",
+  "version": "0.0.1",
+  "description": "Insert emojis anywhere",
+  "main": "emoji-selector/emoji-selector.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BryceBeagle/emojinline.git"
+  },
+  "author": "ignormies",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/BryceBeagle/emojinline/issues"
+  },
+  "homepage": "https://github.com/BryceBeagle/emojinline#readme",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.2.1",
+    "localstoragedb": "^2.3.2"
+  },
+  "devDependencies": {
+    "webextension-polyfill": "^0.3.1"
+  }
+}

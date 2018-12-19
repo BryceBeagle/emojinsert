@@ -1,3 +1,0 @@
-[submodule "localStorageDB"]
-	path = localStorageDB
-	url = https://github.com/knadh/localStorageDB
