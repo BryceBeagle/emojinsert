@@ -1,52 +1,5 @@
 "use strict";
 
-class EmojiSelector extends HTMLElement {
-
-    constructor(textbox) {
-        super();
-
-        let self = this;
-
-        // Create a 4x8 grid of emojis and populate it (grabs first 32 emojis on the list)
-        self.emoji_grid = es_emoji_grid(4, 8, textbox);
-        emoji_search(null, function (emojis) {
-            populate_emoji_grid(self.emoji_grid, emojis);
-        });
-
-        // Search box for searching for emojis by name or other attribute
-        self.search_box = es_search_box();
-
-        // Add the grid and search box elements to the DOM as children of the main UI element
-        self.appendChild(self.search_box);
-        self.appendChild(self.emoji_grid);
-
-        // Listen for changes to the textbox's value TODO: react to changes through javascript
-        self.search_box.addEventListener("input", function () {
-            emoji_search(self.search_box.value, function (emojis) {
-                populate_emoji_grid(self.emoji_grid, emojis);
-            });
-        });
-
-        // Hide the UI element if a click is performed anywhere but on the UI element.
-        // Also close if an emoji (table cell) was clicked
-        self.addEventListener("click", function (event) {
-            if (event.srcElement.tagName !== "TD") {
-                event.stopPropagation();
-            }
-        });
-        addEventListener("click", function () {
-            self.style.display = "none";
-        });
-
-        // Hide the UI element if ESC is pressed
-        addEventListener("keydown", function (event) {
-            if (event.code === "Escape") {
-                self.style.display = "none";
-            }
-        });
-    }
-
-}
 
 /* Create an emoji selector UI element */
 function es_emoji_selector(textbox) {
@@ -95,8 +48,6 @@ function es_emoji_selector(textbox) {
 
     return emoji_selector;
 }
-
-customElements.define('emoji-selector', EmojiSelector);
 
 /* Create the grid to populate with emojis */
 function es_emoji_grid(num_rows, num_columns, textbox) {

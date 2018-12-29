@@ -32,10 +32,9 @@ function open_emoji_selector() {
         emojinsert.search_box.value = "";
     } else {
         // Otherwise, we need to create it for the first time on this page
-        // emojinsert = es_emoji_selector(textbox);
+        emojinsert = es_emoji_selector(textbox);
 
         // Add the UI element to the DOM. The stylesheet will control its position
-        emojinsert = new EmojiSelector(textbox);
         document.body.appendChild(emojinsert);
     }
 
