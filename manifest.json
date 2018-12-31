@@ -3,6 +3,7 @@
   "version": "0.1",
   "description": "Insert emojis anywhere!",
   "permissions": [
+    "tabs",
     "activeTab",
     "declarativeContent",
     "storage",
@@ -16,27 +17,12 @@
     ],
     "persistent": false
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "emoji-selector/emoji-selector-util.js",
-        "emoji-selector/emoji-selector-elements.js",
-        "emoji-selector/emoji-selector.js"
-      ],
-      "css" : [
-        "emoji-selector/emoji-selector.css"
-      ]
-    }
-  ],
   "commands": {
     "show_emoji_selector": {
       "suggested_key": {
         "default": "Ctrl+Space"
       },
-      "description": "Make background green"
+      "description": "Open emoji selector"
     }
   },
   "icons": {
