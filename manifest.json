@@ -20,7 +20,8 @@
   "commands": {
     "show_emoji_selector": {
       "suggested_key": {
-        "default": "Ctrl+Space"
+        "default": "Ctrl+Space",
+        "mac": "MacCtrl+Space"
       },
       "description": "Open emoji selector"
     }
