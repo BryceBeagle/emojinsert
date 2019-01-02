@@ -1,5 +1,15 @@
 "use strict";
 
+// class EmojiSearchBox extends HTMLElement {
+//
+//     constructor() {
+//         super();
+//         console.log("I was constructed");
+//         this.param = 1234;
+//     }
+//
+// }
+// customElements.define('emoji-search-box', EmojiSearchBox);
 
 /* Create an emoji selector UI element */
 function es_emoji_selector(textbox) {
