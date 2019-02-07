@@ -1,70 +1,126 @@
 "use strict";
 
+class Emojinsert extends HTMLElement {
 
-/* Create an emoji selector UI element */
-function es_emoji_selector(textbox) {
+    constructor(active_textbox) {
+        super();
+        this.active_textbox = active_textbox;
+        this.attachShadow({mode: 'open'});
+    }
 
-    // Create a new div at the top level of the DOM and give it a class name of `emoji-selector`
-    let emoji_selector = document.createElement("div");
-    emoji_selector.className = "emoji-selector";
+    // noinspection JSUnusedGlobalSymbols
+    connectedCallback() {
+        this.setup();
+        this.setEventListeners();
+        this.setStyle();
+    }
 
-    // Create a 4x8 grid of emojis and populate it (grabs first 32 emojis on the list)
-    emoji_selector.emoji_grid = es_emoji_grid(4, 8, textbox);
-    emoji_search(null, function (emojis) {
-        populate_emoji_grid(emoji_selector.emoji_grid, emojis);
-    });
+    setup() {
 
-    // Search box for searching for emojis by name or other attribute
-    emoji_selector.search_box = es_search_box();
+        this.search_box = new_emojinsert_search_box();
+        this.shadowRoot.append(this.search_box);
 
-    // Add the grid and search box elements to the DOM as children of the main UI element
-    emoji_selector.appendChild(emoji_selector.search_box);
-    emoji_selector.appendChild(emoji_selector.emoji_grid);
+        // Initialize EmojiGrid. TODO: Use constructor when it's possible
+        this.emoji_grid = new_emojinsert_grid(4, 8);
+        this.search_and_populate_emoji_grid(null);
+        this.shadowRoot.append(this.emoji_grid);
+    }
 
-    // Listen for changes to the textbox's value TODO: react to changes through javascript
-    emoji_selector.search_box.addEventListener("input", function () {
-        emoji_search(emoji_selector.search_box.value, function (emojis) {
-            populate_emoji_grid(emoji_selector.emoji_grid, emojis);
+    setEventListeners() {
+
+        // Listen for changes to the textbox's value
+        this.search_box.addEventListener("input", () => {
+            this.search_and_populate_emoji_grid(this.search_box.value);
         });
-    });
 
-    // Hide the UI element if a click is performed anywhere but on the UI element.
-    // Also close if an emoji (table cell) was clicked
-    emoji_selector.addEventListener("click", function (event) {
-        if (event.srcElement.tagName !== "TD") {
+        // Insert text if emoji was clicked, then hide emojinsert
+        this.addEventListener("emoji-clicked", (event) => {
+            let emoji = event.detail.emoji;
+            this.active_textbox.focus();
+            document.execCommand('insertText', false, emoji);
+            this.hide();
+        });
+
+        // If emojinsert is clicked, prevent event from bubbling any further
+        this.addEventListener("click", (event) => {
             event.stopPropagation();
-        }
-    });
-    addEventListener("click", function () {
-        emoji_selector.style.display = "none";
-    });
+        });
 
-    // Hide the UI element if ESC is pressed
-    addEventListener("keydown", function (event) {
-        if (event.code === "Escape") {
-            emoji_selector.style.display = "none";
-        }
-    });
+        // Hide emojinsert if anything but emojinsert is clicked
+        document.addEventListener("click", () => {
+            this.hide()
+        });
 
-    return emoji_selector;
+        // Hide the UI element if ESC is pressed
+        document.addEventListener("keydown", (event) => {
+            if (event.code === "Escape") {
+                this.hide();
+            }
+        });
+    }
+
+    setStyle() {
+        // https://blog.railwaymen.org/chrome-extensions-shadow-dom/
+        const url = chrome.extension.getURL("emoji-selector/emoji-selector.css");
+        fetch(url, {method: 'GET'}).then(resp => resp.text()).then(css => {
+            let sheet = document.createElement("style");
+            sheet.innerHTML = css;
+            this.shadowRoot.appendChild(sheet);
+        });
+    }
+
+    search_and_populate_emoji_grid(search) {
+        emoji_search(search,(emojis) => {
+            this.populate_emoji_grid(emojis);
+        });
+    }
+
+    /* Populate the grid with emojis
+    *  If there are more cells than emojis, blanks are inserted
+    *  If there are more emojis than cells, they are ignored
+    */
+    populate_emoji_grid(emojis) {
+        let emoji_iter = emojis.values();
+
+        for (let row of this.emoji_grid.rows) {
+            for (let cell of row.cells) {
+                let emoji_item = emoji_iter.next().value;
+                cell.innerText = emoji_item ? emoji_item.emoji : '';
+                cell.title = emoji_item ? emoji_item.name : null;
+                cell.style.tooltip = cell.title;
+            }
+        }
+    }
+
+    hide() {
+        this.style.display = "none";
+    }
+
 }
 
+customElements.define('emojinsert-element', Emojinsert);
+
 /* Create the grid to populate with emojis */
-function es_emoji_grid(num_rows, num_columns, textbox) {
+function new_emojinsert_grid(num_rows, num_columns) {
 
     let emoji_grid = document.createElement("table");
-    emoji_grid.className = "emoji-grid";
+    emoji_grid.className = "emojinsert-grid";
 
     // Create each cell in the grid
     for (let row_num = 0; row_num < num_rows; row_num++) {
         let row = emoji_grid.insertRow();
         for (let column_num = 0; column_num < num_columns; column_num++) {
             let cell = row.insertCell();
+            cell.className = "emojinsert-emoji";
 
             // Insert a cell's emoji into the active textbox where the cursor is when clicked
-            cell.onclick = function () {
-                textbox.focus();
-                document.execCommand('insertText', false, cell.innerText);
+            cell.onclick = function (event) {
+                event.stopPropagation();
+                cell.dispatchEvent(new CustomEvent('emoji-clicked', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {emoji: cell.innerText}
+                }));
             };
         }
     }
@@ -73,27 +129,10 @@ function es_emoji_grid(num_rows, num_columns, textbox) {
 
 }
 
-function es_search_box() {
+function new_emojinsert_search_box() {
     let search_box = document.createElement("input");
-    search_box.className = 'emoji-search-box';
+    search_box.className = "emojinsert-search-box";
 
     return search_box;
 }
 
-/* Populate the grid with emojis
-*  If there are more cells than emojis, blanks are inserted
-*  If there are more emojis than cells, they are ignored
-*/
-function populate_emoji_grid(emoji_grid, emojis) {
-
-    let emoji_iter = emojis.values();
-
-    for (let row of emoji_grid.rows) {
-        for (let cell of row.cells) {
-            let emoji_item = emoji_iter.next().value;
-            cell.innerText = emoji_item ? emoji_item.emoji : '';
-            cell.title = emoji_item ? emoji_item.name : null;
-            cell.style.tooltip = cell.title;
-        }
-    }
-}

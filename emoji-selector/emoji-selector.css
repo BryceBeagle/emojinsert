@@ -1,4 +1,4 @@
-.emoji-selector {
+emojinsert-element {
     position: absolute;
     border-radius: 2px;
     background: rgb(255, 255, 255);
@@ -13,7 +13,7 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
-.emoji-search-box {
+.emojinsert-search-box {
     /* Div sizing */
     padding: 10px;
     width: 100%;
@@ -30,19 +30,19 @@
     font-weight: bold;
 }
 
-.emoji-grid {
+.emojinsert-grid {
     /*Fixed sized cells - don't break if an emoji renders wider than others */
     table-layout: fixed;
     padding: 10px;
 }
 
-.emoji-grid td {
+.emojinsert-grid td {
     /* Center the emojis inside their cells */
     text-align: center;
     padding: 7px;
 }
 
-.emoji-grid td:hover {
+.emojinsert-grid td:hover {
     background-color: #EEEEEE;
     cursor: pointer;
 }
