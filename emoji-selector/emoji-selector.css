@@ -4,7 +4,7 @@ emojinsert-element {
     background: rgb(255, 255, 255);
 
     /* Appear over everything else */
-    z-index: 1000;
+    z-index: 2147483647;
 
     /* Scroll Y only if necessary */
     overflow-y: auto;
