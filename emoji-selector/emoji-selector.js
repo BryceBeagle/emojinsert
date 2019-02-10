@@ -12,18 +12,18 @@ chrome.runtime.onMessage.addListener(
             let textbox = get_active_textbox();
 
             // If no text box is active, don't do anything
-            if (!textbox) {
+            if (!textbox || (emojinsert && emojinsert.active_textbox)) {
                 return
             }
 
             if (emojinsert) {
                 emojinsert.active_textbox = textbox;
                 emojinsert.style.display = "initial";
-                emojinsert.search_box.value = "";
             } else {
                 emojinsert = new Emojinsert(textbox);
                 document.body.append(emojinsert);
             }
+
             emojinsert.search_box.focus();
 
             let position_rect = textbox.getBoundingClientRect();

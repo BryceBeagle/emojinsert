@@ -11,9 +11,17 @@ function emoji_search(query, callback) {
 function get_active_textbox() {
     let activeElement = document.activeElement;
 
-    // Is there an active element, and if so, is it of type `text`? Other types of active elements could be checkboxes
-    // or radio buttons
-    if (activeElement && activeElement.contentEditable) {
+    if (!activeElement) {
+        return null;
+    }
+
+    if (activeElement.isContentEditable) {
         return activeElement;
     }
+
+    if (activeElement.tagName === 'INPUT' && /^(text|number|search|url)$/i.test(activeElement.type)) {
+        return activeElement;
+    }
+
+    return null;
 }

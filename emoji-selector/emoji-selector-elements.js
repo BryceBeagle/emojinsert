@@ -70,7 +70,7 @@ class Emojinsert extends HTMLElement {
     }
 
     search_and_populate_emoji_grid(search) {
-        emoji_search(search,(emojis) => {
+        emoji_search(search, (emojis) => {
             this.populate_emoji_grid(emojis);
         });
     }
@@ -93,6 +93,14 @@ class Emojinsert extends HTMLElement {
     }
 
     hide() {
+
+        if (!this.active_textbox) {
+            return;
+        }
+
+        this.active_textbox.focus();
+        this.active_textbox = null;
+        this.search_box.value = "";
         this.style.display = "none";
     }
 
