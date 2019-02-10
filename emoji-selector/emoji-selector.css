@@ -40,9 +40,12 @@ emojinsert-element {
     /* Center the emojis inside their cells */
     text-align: center;
     padding: 7px;
+    border-radius: 100%;
 }
 
 .emojinsert-grid td:hover {
-    background-color: #EEEEEE;
+    background-color: #DEDEDE;
     cursor: pointer;
+    transition: .2s;
+    border-radius: 2px;
 }
