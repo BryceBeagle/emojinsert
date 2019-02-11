@@ -41,7 +41,6 @@ class Emojinsert extends HTMLElement {
         this.addEventListener("emoji-clicked", (event) => {
             let emoji = event.detail.emoji;
             this.active_textbox.focus();
-            console.log(emoji);
             document.execCommand('insertText', false, emoji);
             this.hide();
         });
