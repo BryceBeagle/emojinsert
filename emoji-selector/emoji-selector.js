@@ -29,9 +29,7 @@ chrome.runtime.onMessage.addListener(
             Promise.all(
                 [emojinsert.setStyle(), emojinsert.searchAndPopulateEmojiGrid(null)]
             ).then(() => {
-                console.log("AA");
                 emojinsert.setPositionAndOrder.bind(emojinsert)();
-                console.log("BB");
             });
 
             emojinsert.search_box.focus();

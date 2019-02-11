@@ -106,7 +106,6 @@ class Emojinsert extends HTMLElement {
         if (top_position + this.clientHeight < window_height) {
             this.style.top = `${top_position}px`;
         } else {
-            console.log("2");
             this.style.bottom = `${window_height - top_position}px`;
             this.shadowRoot.insertBefore(this.emoji_grid, this.search_box);
         }
