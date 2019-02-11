@@ -18,7 +18,6 @@
   "homepage": "https://github.com/BryceBeagle/emojinline#readme",
   "dependencies": {
     "@webcomponents/custom-elements": "^1.2.1",
-    "document-register-element": "^1.13.1",
     "localstoragedb": "^2.3.2"
   },
   "devDependencies": {}
