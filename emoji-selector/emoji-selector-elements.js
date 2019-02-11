@@ -46,7 +46,7 @@ class Emojinsert extends HTMLElement {
 
         // Hide emojinsert if anything but emojinsert is clicked
         document.addEventListener("click", () => {
-            this.hide()
+            this.hide();
         });
 
         // Hide the UI element if ESC is pressed
@@ -58,7 +58,7 @@ class Emojinsert extends HTMLElement {
     }
 
     setStyle() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             // https://blog.railwaymen.org/chrome-extensions-shadow-dom/
             const url = chrome.extension.getURL("emoji-selector/emoji-selector.css");
             fetch(url, {method: 'GET'}).then(resp => resp.text()).then(css => {
@@ -67,16 +67,16 @@ class Emojinsert extends HTMLElement {
                 this.shadowRoot.appendChild(sheet);
                 resolve();
             });
-        })
+        });
     };
 
     searchAndPopulateEmojiGrid(search) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             emoji_search(search, (emojis) => {
                 this.PopulateEmojiGrid(emojis);
                 resolve();
             });
-        })
+        });
     }
 
     /* Populate the grid with emojis
@@ -98,18 +98,19 @@ class Emojinsert extends HTMLElement {
 
     setPositionAndOrder() {
 
-        console.log(this.active_textbox.clientHeight);
-
         let position_rect = this.active_textbox.getBoundingClientRect();
         let top_position = position_rect.top + this.active_textbox.clientHeight;
 
         let window_height = window.innerHeight;
 
-        if (top_position + this.clientHeight > window_height) {
-            top_position = position_rect.top - this.clientHeight;
+        if (top_position + this.clientHeight < window_height) {
+            this.style.top = `${top_position}px`;
+        } else {
+            console.log("2");
+            this.style.bottom = `${window_height - top_position}px`;
+            this.shadowRoot.insertBefore(this.emoji_grid, this.search_box);
         }
 
-        this.style.top = `${top_position}px`;
         this.style.left = `${position_rect.left}px`;
 
     }
