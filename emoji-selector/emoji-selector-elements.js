@@ -22,6 +22,12 @@ class Emojinsert extends HTMLElement {
         this.emoji_grid = new_emojinsert_grid(4, 8);
         this.shadowRoot.append(this.emoji_grid);
 
+        // Don't let the selector get shoved at the end of the DOM by default
+        // That can cause problems where the page is exactly the height of the
+        // screen. Adding the selector will force everything to reflow until the
+        // css kicks in.
+        this.style.position = "fixed";
+
     }
 
     setEventListeners() {
@@ -35,6 +41,7 @@ class Emojinsert extends HTMLElement {
         this.addEventListener("emoji-clicked", (event) => {
             let emoji = event.detail.emoji;
             this.active_textbox.focus();
+            console.log(emoji);
             document.execCommand('insertText', false, emoji);
             this.hide();
         });
@@ -99,14 +106,14 @@ class Emojinsert extends HTMLElement {
     setPositionAndOrder() {
 
         let position_rect = this.active_textbox.getBoundingClientRect();
-        let top_position = position_rect.top + this.active_textbox.clientHeight;
+        let selector_top = position_rect.top + position_rect.height;
 
         let window_height = window.innerHeight;
 
-        if (top_position + this.clientHeight < window_height) {
-            this.style.top = `${top_position}px`;
+        if (position_rect.top + position_rect.height + this.clientHeight < window_height) {
+            this.style.top = `${selector_top}px`;
         } else {
-            this.style.bottom = `${window_height - top_position}px`;
+            this.style.bottom = `${window_height - position_rect.top + 15}px`;
             this.shadowRoot.insertBefore(this.emoji_grid, this.search_box);
         }
 
