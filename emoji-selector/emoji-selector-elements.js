@@ -12,7 +12,6 @@ class Emojinsert extends HTMLElement {
     connectedCallback() {
         this.setup();
         this.setEventListeners();
-        this.setStyle();
     }
 
     setup() {
@@ -20,17 +19,16 @@ class Emojinsert extends HTMLElement {
         this.search_box = new_emojinsert_search_box();
         this.shadowRoot.append(this.search_box);
 
-        // Initialize EmojiGrid. TODO: Use constructor when it's possible
         this.emoji_grid = new_emojinsert_grid(4, 8);
-        this.search_and_populate_emoji_grid(null);
         this.shadowRoot.append(this.emoji_grid);
+
     }
 
     setEventListeners() {
 
         // Listen for changes to the textbox's value
         this.search_box.addEventListener("input", () => {
-            this.search_and_populate_emoji_grid(this.search_box.value);
+            this.searchAndPopulateEmojiGrid(this.search_box.value);
         });
 
         // Insert text if emoji was clicked, then hide emojinsert
@@ -60,26 +58,32 @@ class Emojinsert extends HTMLElement {
     }
 
     setStyle() {
-        // https://blog.railwaymen.org/chrome-extensions-shadow-dom/
-        const url = chrome.extension.getURL("emoji-selector/emoji-selector.css");
-        fetch(url, {method: 'GET'}).then(resp => resp.text()).then(css => {
-            let sheet = document.createElement("style");
-            sheet.innerHTML = css;
-            this.shadowRoot.appendChild(sheet);
-        });
-    }
+        return new Promise((resolve, reject) => {
+            // https://blog.railwaymen.org/chrome-extensions-shadow-dom/
+            const url = chrome.extension.getURL("emoji-selector/emoji-selector.css");
+            fetch(url, {method: 'GET'}).then(resp => resp.text()).then(css => {
+                let sheet = document.createElement("style");
+                sheet.innerHTML = css;
+                this.shadowRoot.appendChild(sheet);
+                resolve();
+            });
+        })
+    };
 
-    search_and_populate_emoji_grid(search) {
-        emoji_search(search, (emojis) => {
-            this.populate_emoji_grid(emojis);
-        });
+    searchAndPopulateEmojiGrid(search) {
+        return new Promise((resolve, reject) => {
+            emoji_search(search, (emojis) => {
+                this.PopulateEmojiGrid(emojis);
+                resolve();
+            });
+        })
     }
 
     /* Populate the grid with emojis
     *  If there are more cells than emojis, blanks are inserted
     *  If there are more emojis than cells, they are ignored
     */
-    populate_emoji_grid(emojis) {
+    PopulateEmojiGrid(emojis) {
         let emoji_iter = emojis.values();
 
         for (let row of this.emoji_grid.rows) {
@@ -90,6 +94,24 @@ class Emojinsert extends HTMLElement {
                 cell.style.tooltip = cell.title;
             }
         }
+    }
+
+    setPositionAndOrder() {
+
+        console.log(this.active_textbox.clientHeight);
+
+        let position_rect = this.active_textbox.getBoundingClientRect();
+        let top_position = position_rect.top + this.active_textbox.clientHeight;
+
+        let window_height = window.innerHeight;
+
+        if (top_position + this.clientHeight > window_height) {
+            top_position = position_rect.top - this.clientHeight;
+        }
+
+        this.style.top = `${top_position}px`;
+        this.style.left = `${position_rect.left}px`;
+
     }
 
     hide() {

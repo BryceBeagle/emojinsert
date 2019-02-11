@@ -24,11 +24,17 @@ chrome.runtime.onMessage.addListener(
                 document.body.append(emojinsert);
             }
 
-            emojinsert.search_box.focus();
+            // Position the selector properly once the selector is fully constructed and properly sized
+            // TODO: This is really ugly and surely there's a better asynchronous way of doing this.
+            Promise.all(
+                [emojinsert.setStyle(), emojinsert.searchAndPopulateEmojiGrid(null)]
+            ).then(() => {
+                console.log("AA");
+                emojinsert.setPositionAndOrder.bind(emojinsert)();
+                console.log("BB");
+            });
 
-            let position_rect = textbox.getBoundingClientRect();
-            emojinsert.style.top = `${position_rect.top + 35}px`;
-            emojinsert.style.left = `${position_rect.left}px`;
+            emojinsert.search_box.focus();
 
         }
         sendResponse();
