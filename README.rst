@@ -9,3 +9,10 @@
 **Usage**
 
 Press Ctrl+Space in a textbox and hope it works. It will probably be awkwardly positioned
+
+
+**Credits**
+
+Thanks to `@velovix`_ for the current icons
+
+.. _`@velovix`: https://github.com/velovix
