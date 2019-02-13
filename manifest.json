@@ -1,6 +1,6 @@
 {
   "name": "Emojinsert",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Insert emojis anywhere!",
   "permissions": [
     "activeTab",
@@ -24,6 +24,12 @@
       },
       "description": "Show emoji selector"
     }
+  },
+  "icons": {
+    "16": "images/logo16.png",
+    "32": "images/logo32.png",
+    "48": "images/logo48.png",
+    "128": "images/logo128.png"
   },
   "web_accessible_resources": [
     "emoji-selector/emoji-selector.css"
